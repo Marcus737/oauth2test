@@ -1,0 +1,18 @@
+server:
+  port: 9001
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/oauth2test?serverTimezone=UTC
+    username: root
+    password: root
+  main:
+    allow-bean-definition-overriding: true
+mybatis:
+  type-aliases-package: com.wei.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    org.springframework.security: debug
