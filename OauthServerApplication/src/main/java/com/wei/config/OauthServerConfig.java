@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -37,13 +38,13 @@ public class OauthServerConfig extends AuthorizationServerConfigurerAdapter {
  
  
     //从数据库中查询出客户端信息
-//    @Bean
-//    public JdbcClientDetailsService clientDetailsService() {
-//        JdbcClientDetailsService jdbcClientDetailsService = new JdbcClientDetailsService(dataSource);
-//        jdbcClientDetailsService.setPasswordEncoder(passwordEncoder);
-//        return jdbcClientDetailsService;
-//    }
-//
+    @Bean
+    public JdbcClientDetailsService clientDetailsService() {
+        JdbcClientDetailsService jdbcClientDetailsService = new JdbcClientDetailsService(dataSource);
+        jdbcClientDetailsService.setPasswordEncoder(passwordEncoder);
+        return jdbcClientDetailsService;
+    }
+
     //token保存策略
     @Bean
     public TokenStore tokenStore() {
@@ -61,29 +62,30 @@ public class OauthServerConfig extends AuthorizationServerConfigurerAdapter {
     public AuthorizationCodeServices authorizationCodeServices() {
         return new JdbcAuthorizationCodeServices(dataSource);
     }
- 
+
+
     //指定客户端登录信息来源
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //从数据库取数据
-//        clients.withClientDetails(clientDetailsService());
+        clients.withClientDetails(clientDetailsService());
  
 //         从内存中取数据
-        clients.inMemory()
-                .withClient("baidu")
-                .secret(passwordEncoder.encode("12345"))
-                .resourceIds("product_api")
-                .authorizedGrantTypes(
-                        "authorization_code",
-                        "password",
-                        "client_credentials",
-                        "implicit",
-                        "refresh_token"
-                )// 该client允许的授权类型 authorization_code,password,refresh_token,implicit,client_credentials
-                .scopes("all")// 允许的授权范围
-                .autoApprove(false)
-                //加上验证回调地址
-                .redirectUris("http://www.baidu.com");
+//        clients.inMemory()
+//                .withClient("baidu")
+//                .secret(passwordEncoder.encode("12345"))
+//                .resourceIds("product_api")
+//                .authorizedGrantTypes(
+//                        "authorization_code",
+//                        "password",
+//                        "client_credentials",
+//                        "implicit",
+//                        "refresh_token"
+//                )// 该client允许的授权类型 authorization_code,password,refresh_token,implicit,client_credentials
+//                .scopes("read", "write")// 允许的授权范围
+//                .autoApprove(false)
+//                //加上验证回调地址
+//                .redirectUris("http://www.baidu.com");
     }
  
     //检测token的策略

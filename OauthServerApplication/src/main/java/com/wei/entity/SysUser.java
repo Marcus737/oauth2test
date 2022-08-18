@@ -3,12 +3,15 @@ package com.wei.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class SysUser implements UserDetails {
+
+
     private Integer id;
     private String username;
     private String password;
